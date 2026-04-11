@@ -10,6 +10,7 @@ TEST_DOCS = 2500
 MIN_DOC_CHARS = 300
 FINEWEB_DATASET = "HuggingFaceFW/fineweb"
 FINEWEB_CONFIG = "CC-MAIN-2024-10"
+RANDOM_SEED = 42
 
 # 📁 Paths
 DATA_DIR = os.path.join(config_global.PROJECT_ROOT, "data")
