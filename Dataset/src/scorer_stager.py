@@ -119,7 +119,8 @@ def run():
         return
         
     print("🔍 Scoring & Staging pipeline...")
-    with open(cfg.TRAIN_JSONL) as f: docs = [json.loads(l) for l in f]
+    with open(cfg.TRAIN_JSONL , encoding="utf-8") as f:
+        docs = [json.loads(l) for l in f]
     
     print("Loading reference model & tokenizer...")
     ckpt = torch.load(os.path.join(config_global.PROJECT_ROOT, "checkpoints", "reference_model.pt"), map_location=config_global.DEVICE)
