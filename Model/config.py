@@ -5,19 +5,19 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import config_global
 
 # 📐 GPT Architecture (Exact from original)
-SEQ_LEN = 512
-N_EMBD = 768
-N_HEAD = 8
-N_LAYER = 12
-DROPOUT = 0.1
-VOCAB_SIZE = 30000
-
 # SEQ_LEN = 512
-# N_EMBD = 512
+# N_EMBD = 768
 # N_HEAD = 8
-# N_LAYER = 8
+# N_LAYER = 12
 # DROPOUT = 0.1
 # VOCAB_SIZE = 30000
+
+SEQ_LEN = 512
+N_EMBD = 512
+N_HEAD = 8
+N_LAYER = 8
+DROPOUT = 0.1
+VOCAB_SIZE = 30000
 
 # 🏋️ Training
 BATCH_SIZE = 8
@@ -28,7 +28,9 @@ EPOCHS = 3  # 5
 GRAD_CLIP = 1.0
 
 # 📊 Checkpointing
-SAVE_INTERVAL_PCT = 0.20  # 20%, 40%, 60%, 80%, 100%
+# Curriculum mode: saves after each epoch per stage → 4 final files (curriculum_stage{1-4}_final.pt)
+# Random mode    : saves after each epoch, deletes previous → 1 final file (random_final.pt)
+# Total after full experiment: 5 model files
 
 # 📚 Curriculum
 USE_CURRICULUM = True
