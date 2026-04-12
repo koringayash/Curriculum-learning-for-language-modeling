@@ -2,7 +2,8 @@
 import argparse
 import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))  # project root
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))    # Model/ dir → makes 'src' importable
 from src.trainer import train
 
 def main():

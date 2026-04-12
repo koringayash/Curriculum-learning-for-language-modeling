@@ -28,7 +28,8 @@ EPOCHS = 3  # 5
 GRAD_CLIP = 1.0
 
 # 📊 Checkpointing
-# Curriculum mode: saves after each epoch per stage → 4 final files (curriculum_stage{1-4}_final.pt)
+# Curriculum mode: saves at 25%, 50%, 75%, 100% of total steps (4 milestone snapshots kept permanently)
+#                  curriculum_25pct.pt | curriculum_50pct.pt | curriculum_75pct.pt | curriculum_final.pt
 # Random mode    : saves after each epoch, deletes previous → 1 final file (random_final.pt)
 # Total after full experiment: 5 model files
 
