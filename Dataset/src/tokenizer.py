@@ -44,6 +44,6 @@ def train_tokenizer():
     )
     
     os.makedirs(os.path.dirname(cfg.TOKENIZER_FILE), exist_ok=True)
-    tokenizer.train_from_iterator(text_iterator(cfg.TRAIN_JSONL), trainer=trainer, length=(cfg.TRAIN_DOCS+2000))
+    tokenizer.train_from_iterator(text_iterator(cfg.TRAIN_JSONL), trainer=trainer, length=(cfg.TRAIN_DOCS+5000))
     tokenizer.save(cfg.TOKENIZER_FILE)
     print(f"✅ Tokenizer trained & saved in {time.time() - start:.1f}s (Vocab: {tokenizer.get_vocab_size():,})")

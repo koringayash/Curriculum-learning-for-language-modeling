@@ -11,9 +11,9 @@ import torch
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import config_global
 import Model.config as mc
-from src.loader import find_latest_checkpoint, load_model, load_tokenizer
-from src.evaluator import run_perplexity_eval, run_lambada, run_hellaswag
-from src.comparator import print_comparison_table
+from Evaluation.src.loader import find_latest_checkpoint, load_model, load_tokenizer
+from Evaluation.src.evaluator import run_perplexity_eval, run_lambada, run_hellaswag
+from Evaluation.src.comparator import print_comparison_table
 
 
 def main():
@@ -46,10 +46,16 @@ def main():
     results = {}
     for mode, ckpt_path in [("curriculum", curr_ckpt), ("random", rand_ckpt)]:
         model = load_model(ckpt_path)
+        def timed_eval(name, fn):
+            t = time.time()
+            result = fn()
+            print(f"   ⏱️ {name}: {time.time() - t:.2f}s")
+            return result
+
         results[mode] = {
-            "ppl": run_perplexity_eval(model, mode),
-            "lambada": run_lambada(model, tokenizer, mode),
-            "hellaswag": run_hellaswag(model, tokenizer, mode),
+            "ppl": timed_eval("Perplexity", lambda: run_perplexity_eval(model, mode)),
+            "lambada": timed_eval("LAMBADA", lambda: run_lambada(model, tokenizer, mode)),
+            "hellaswag": timed_eval("HellaSwag", lambda: run_hellaswag(model, tokenizer, mode)),
         }
         del model
         if torch.cuda.is_available():

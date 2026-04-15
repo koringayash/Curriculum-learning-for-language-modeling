@@ -14,14 +14,20 @@ from src.scorer_stager import run as run_stager
 def main():
     print("🚀 Starting Dataset Pipeline (Steps 1-5)...")
     config_global.set_seed()
+
     t0 = time.time()
-    
-    download_and_split()
-    train_tokenizer()
-    encode_corpus()
-    train_reference_model()
-    run_stager()
-    
+    def timed_step(name, fn):
+        print(f"\n⏳ Starting: {name}")
+        t = time.time()
+        fn()
+        print(f"✅ Finished: {name} in {time.time() - t:.2f}s")
+
+    timed_step("Download & Split", download_and_split)
+    timed_step("Tokenizer Training", train_tokenizer)
+    timed_step("Encoding Corpus", encode_corpus)
+    timed_step("Reference Model Training", train_reference_model)
+    timed_step("Scoring & Staging", run_stager)
+
     print(f"\n🎉 Dataset Pipeline Finished. Total Time: {time.time() - t0:.1f}s")
 
 if __name__ == "__main__":

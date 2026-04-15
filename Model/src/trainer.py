@@ -20,6 +20,7 @@ import sys
 import json
 import numpy as np
 import torch
+import time
 from tqdm import tqdm
 from torch.cuda.amp import autocast, GradScaler
 
@@ -81,23 +82,38 @@ def _save_checkpoint(path, model, optimizer, scheduler, scaler, rng, global_step
         },
         path,
     )
-    np.save(path.replace(".pt", "_rng.npy"), rng.get_state())
+
+    # ✅ FIX: store RNG safely
+    rng_state = rng.get_state()
+    np.save(
+        path.replace(".pt", "_rng.npy"),
+        np.array(rng_state, dtype=object)   # <-- FIX HERE
+    )
+
     print(f"\n💾 Checkpoint saved → {os.path.basename(path)}")
 
 
 def _load_checkpoint(path, model, optimizer, scheduler, scaler, rng):
     """Restore full training state. Returns the saved global_step."""
     ckpt = torch.load(path, map_location=config_global.DEVICE)
+
     model.load_state_dict(ckpt["model_state"])
     optimizer.load_state_dict(ckpt["optim_state"])
+
     if "scheduler_state" in ckpt:
         scheduler.load_state_dict(ckpt["scheduler_state"])
+
     if "scaler_state" in ckpt:
         scaler.load_state_dict(ckpt["scaler_state"])
+
+    # ✅ FIX: load RNG safely
     rng_path = path.replace(".pt", "_rng.npy")
     if os.path.exists(rng_path):
-        rng.set_state(np.load(rng_path, allow_pickle=True).item())
+        rng_state = np.load(rng_path, allow_pickle=True)
+        rng.set_state(tuple(rng_state))   # <-- FIX HERE
+
     step = ckpt.get("global_step", 0)
+
     print(f"🔄 Resumed from checkpoint → {os.path.basename(path)}  (step {step})")
     return step
 
@@ -207,6 +223,9 @@ def _train_curriculum(resume: bool) -> None:
     model.train()
 
     for epoch in range(cfg.EPOCHS):
+
+        epoch_start = time.time()
+
         # Skip fully completed epochs without touching RNG
         if epoch < resume_epoch:
             continue
@@ -268,6 +287,7 @@ def _train_curriculum(resume: bool) -> None:
         avg_loss = epoch_loss / (total_micro - start_micro)
         print(f"\n   ✅ Epoch {epoch + 1}/{cfg.EPOCHS} done | avg loss: {avg_loss:.4f}")
         resume_micro = 0   # only the first resumed epoch has a non-zero start_micro
+        print(f"📦 Epoch finished in {time.time() - epoch_start:.2f}s")
 
     # ── summary ───────────────────────────────────────────────────────────
     print("\n✅ Curriculum training complete!")

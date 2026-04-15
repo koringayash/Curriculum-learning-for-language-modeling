@@ -18,22 +18,29 @@ from Model.src.model import GPT
 def find_latest_checkpoint(mode_tag: str) -> str | None:
     """
     Find the most recent checkpoint for a given training mode.
-    Sorts by global step number embedded in the filename.
-
-    Args:
-        mode_tag: 'curriculum' or 'random'.
-
-    Returns:
-        Absolute path to checkpoint, or None if missing.
+    Priority:
+    1. Return *_final.pt if it exists
+    2. Otherwise, return highest step checkpoint
     """
     ckpt_dir = mc.CHECKPOINT_DIR
     if not os.path.exists(ckpt_dir):
         return None
 
-    pattern = re.compile(rf"^{mode_tag}_step(\d+)\.pt$|ckpt_{mode_tag}_.*_step(\d+)\.pt$")
+    files = os.listdir(ckpt_dir)
+
+    # ✅ 1. Check for final checkpoint first
+    final_name = f"{mode_tag}_final.pt"
+    if final_name in files:
+        return os.path.join(ckpt_dir, final_name)
+
+    # ✅ 2. Otherwise search step-based checkpoints
+    pattern = re.compile(
+        rf"^{mode_tag}_step(\d+)\.pt$|ckpt_{mode_tag}_.*_step(\d+)\.pt$"
+    )
+
     candidates = []
 
-    for fname in os.listdir(ckpt_dir):
+    for fname in files:
         match = pattern.search(fname)
         if match:
             step = int(match.group(1) or match.group(2))
@@ -42,10 +49,9 @@ def find_latest_checkpoint(mode_tag: str) -> str | None:
     if not candidates:
         return None
 
-    # Return path of checkpoint with highest step count
+    # Return checkpoint with highest step
     candidates.sort(key=lambda x: x[0])
     return os.path.join(ckpt_dir, candidates[-1][1])
-
 
 def load_model(checkpoint_path: str) -> GPT:
     """

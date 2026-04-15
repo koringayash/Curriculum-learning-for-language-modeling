@@ -5,19 +5,19 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import config_global
 
 # 📐 GPT Architecture (Exact from original)
-# SEQ_LEN = 512
-# N_EMBD = 768
-# N_HEAD = 8
-# N_LAYER = 12
-# DROPOUT = 0.1
-# VOCAB_SIZE = 30000
-
 SEQ_LEN = 512
-N_EMBD = 512
+N_EMBD = 768
 N_HEAD = 8
-N_LAYER = 8
+N_LAYER = 12
 DROPOUT = 0.1
 VOCAB_SIZE = 30000
+
+# SEQ_LEN = 512
+# N_EMBD = 512
+# N_HEAD = 8
+# N_LAYER = 8
+# DROPOUT = 0.1
+# VOCAB_SIZE = 30000
 
 # 🏋️ Training
 BATCH_SIZE = 8
@@ -47,5 +47,8 @@ CURRICULUM_STAGE_WEIGHTS = {
 DATA_DIR = os.path.join(config_global.PROJECT_ROOT, "data")
 CHECKPOINT_DIR = os.path.join(config_global.PROJECT_ROOT, "checkpoints")
 STAGE_BINS = {
-    i: os.path.join(DATA_DIR, f"stage_{i}.bin") for i in range(1, 5)
+    1: os.path.join(DATA_DIR, "stage_1_easy.bin"),
+    2: os.path.join(DATA_DIR, "stage_2_medium.bin"),
+    3: os.path.join(DATA_DIR, "stage_3_hard.bin"),
+    4: os.path.join(DATA_DIR, "stage_4_very_hard.bin"),
 }
