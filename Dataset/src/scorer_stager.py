@@ -18,6 +18,8 @@ import config_global
 import Dataset.config as cfg
 from Model.src.model import GPT
 
+sys.stdout = open('logs.txt', 'a')
+
 @torch.no_grad()
 def compute_ppl(text: str, model: GPT, tokenizer: Tokenizer) -> float:
     """Compute document perplexity using reference model (batched chunks)."""

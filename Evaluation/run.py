@@ -12,9 +12,11 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import config_global
 import Model.config as mc
 from Evaluation.src.loader import find_latest_checkpoint, load_model, load_tokenizer
-from Evaluation.src.evaluator import run_perplexity_eval, run_lambada, run_hellaswag
+from Evaluation.src.evaluator import (run_perplexity_eval, run_lambada, run_hellaswag, run_openbookqa, run_arc_easy, run_winogrande)
 from Evaluation.src.comparator import print_comparison_table
 
+
+sys.stdout = open('logs.txt', 'a')
 
 def main():
     print("=" * 60)
@@ -53,9 +55,13 @@ def main():
             return result
 
         results[mode] = {
-            "ppl": timed_eval("Perplexity", lambda: run_perplexity_eval(model, mode)),
-            "lambada": timed_eval("LAMBADA", lambda: run_lambada(model, tokenizer, mode)),
-            "hellaswag": timed_eval("HellaSwag", lambda: run_hellaswag(model, tokenizer, mode)),
+            "ppl":       timed_eval("Perplexity", lambda: run_perplexity_eval(model, mode)),
+            "lambada":   timed_eval("LAMBADA",    lambda: run_lambada(model, tokenizer, mode)),
+            "hellaswag": timed_eval("HellaSwag",  lambda: run_hellaswag(model, tokenizer, mode)),
+            # ↓ ADD THESE THREE
+            "openbookqa": timed_eval("OpenBookQA", lambda: run_openbookqa(model, tokenizer, mode)),
+            "arc_easy":   timed_eval("ARC-Easy",   lambda: run_arc_easy(model, tokenizer, mode)),
+            "winogrande": timed_eval("WinoGrande", lambda: run_winogrande(model, tokenizer, mode)),
         }
         del model
         if torch.cuda.is_available():

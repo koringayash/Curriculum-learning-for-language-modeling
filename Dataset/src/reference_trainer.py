@@ -17,6 +17,8 @@ import Dataset.config as cfg
 from Model.src.model import GPT
 from Model.src.dataset import TokenDataset
 
+sys.stdout = open('logs.txt', 'a')
+
 def train_reference_model():
     """Trains tiny reference model for 1 epoch. Skips if checkpoint exists."""
     import time

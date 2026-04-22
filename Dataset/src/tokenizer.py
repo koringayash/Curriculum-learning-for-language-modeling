@@ -11,6 +11,8 @@ from tokenizers import Tokenizer, models, trainers, pre_tokenizers, decoders
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 import Dataset.config as cfg
 
+sys.stdout = open('logs.txt', 'a')
+
 def text_iterator(filepath: str):
     """Yields raw text strings from a JSONL file one at a time (memory efficient)."""
     with open(filepath, "r", encoding="utf-8") as f:

@@ -14,6 +14,7 @@ import config_global
 import Model.config as mc
 from Model.src.model import GPT
 
+sys.stdout = open('logs.txt', 'a')
 
 def find_latest_checkpoint(mode_tag: str) -> str | None:
     """

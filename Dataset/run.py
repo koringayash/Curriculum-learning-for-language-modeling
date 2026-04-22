@@ -11,6 +11,8 @@ from src.reference_trainer import train_reference_model
 from src.scorer_stager import run as run_stager
 
 
+sys.stdout = open('logs.txt', 'a')
+
 def main():
     print("🚀 Starting Dataset Pipeline (Steps 1-5)...")
     config_global.set_seed()

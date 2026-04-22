@@ -10,6 +10,9 @@ from tqdm import tqdm
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 import Dataset.config as cfg
 
+
+sys.stdout = open('logs.txt', 'a')
+
 def is_quality_prose(text: str) -> bool:
     """Single-pass prose quality filter. Returns True if text passes all checks."""
     if len(text) < cfg.MIN_DOC_CHARS:

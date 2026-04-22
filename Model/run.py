@@ -6,6 +6,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))  # project roo
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))    # Model/ dir → makes 'src' importable
 from src.trainer import train
 
+sys.stdout = open('logs.txt', 'a')
+
 def main():
     parser = argparse.ArgumentParser(description="Train GPT with Curriculum or Random sampling")
     parser.add_argument("--mode", choices=["curriculum", "random"], default="curriculum", help="Training mode")

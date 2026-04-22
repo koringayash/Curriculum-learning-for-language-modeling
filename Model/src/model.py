@@ -7,6 +7,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+import sys
+
+sys.stdout = open('logs.txt', 'a')
 
 class RMSNorm(nn.Module):
     def __init__(self, dim: int, eps: float = 1e-6):

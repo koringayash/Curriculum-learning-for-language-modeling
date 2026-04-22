@@ -13,6 +13,7 @@ from tokenizers import Tokenizer
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 import Dataset.config as cfg
 
+sys.stdout = open('logs.txt', 'a')
 
 def _encode_file(jsonl_path: str, bin_path: str, desc: str) -> int:
     """

@@ -5,7 +5,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 import config_global
 
 # 📊 Dataset Scale
-TRAIN_DOCS = 100000
+TRAIN_DOCS = 1_500_000
 TEST_DOCS = 5000
 MIN_DOC_CHARS = 300
 FINEWEB_DATASET = "HuggingFaceFW/fineweb"
