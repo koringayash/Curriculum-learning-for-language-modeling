@@ -3,7 +3,7 @@ docker build -t nlp-curriculum .
 docker run -it --gpus all -v $(pwd):/app nlp-curriculum bash
 
 # 2. Dataset (Steps 1-5)
-python Dataset/run.py
+python Dataset/run.py 
 
 # 3. Train Curriculum
 python Model/run.py --mode curriculum
