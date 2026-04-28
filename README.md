@@ -1,5 +1,6 @@
 # 1. Setup
 docker build -t nlp-curriculum .
+
 docker run -it --gpus all -v $(pwd):/app nlp-curriculum bash
 
 # 2. Dataset (Steps 1-5)
